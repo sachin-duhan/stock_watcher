@@ -25,4 +25,8 @@ export class AppComponent {
     this.current_slist.push(this.inputSearch.toLowerCase())
     this.inputSearch = "";
   }
+
+  removeSymbol(index: number){
+    this.current_slist.splice(index, 1);
+  }
 }

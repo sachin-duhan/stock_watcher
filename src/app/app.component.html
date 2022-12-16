@@ -7,7 +7,7 @@
     </div>
   </div>
 
-  <div *ngFor="let symbol of current_slist">
-    <stock [symbol]="symbol"></stock>
+  <div *ngFor="let symbol of current_slist; let idx=index">
+    <stock (remove)="removeSymbol(idx)" [symbol]="symbol"></stock>
   </div>
 </div>

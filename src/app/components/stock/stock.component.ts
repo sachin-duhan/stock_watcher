@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { getKeyFromSymbol, getSymbolValue, payload, TAttributes } from 'src/app/utils';
 
 @Component({
@@ -6,7 +6,7 @@ import { getKeyFromSymbol, getSymbolValue, payload, TAttributes } from 'src/app/
   templateUrl: './stock.component.html',
   styleUrls: ['./stock.component.css']
 })
-export class StockComponent implements OnInit {
+export class StockComponent implements OnInit, OnDestroy {
   @Input() symbol !: string
 
   public allowed_attributes: string[] = []
@@ -33,8 +33,6 @@ export class StockComponent implements OnInit {
     this.allowed_attributes.forEach(key => {
       this.data.push(_data[getKeyFromSymbol(key)])
     })
-
-    console.log(_data)
   }
 
   public wsConnection!: any
@@ -73,5 +71,10 @@ export class StockComponent implements OnInit {
     }
     this.setAllowAttr()
   }
+  @Output() remove = new EventEmitter<void>();
 
+  _remove(){
+    this.remove.emit()
+    this.ngOnDestroy()
+  }
 }
