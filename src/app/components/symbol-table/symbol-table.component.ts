@@ -7,6 +7,7 @@ import { TradeData } from 'src/app/utils';
   styleUrls: ['./symbol-table.component.css']
 })
 export class SymbolTableComponent {
+  @Input() symbol!: string;
   @Input() attributes!: string[]
   @Input() data!: string[];
   @Input() change!: 'positive' | 'negetive' | 'neutral';

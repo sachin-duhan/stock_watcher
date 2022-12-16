@@ -1,0 +1,9 @@
+<div class="p-2 d-flex gap-2 bg-light flex-wrap justify-content-around rounded">
+    <div  *ngFor="let attribute of table_attributes; let idx = index" (click)="handleClick(!attribute.checked, idx)" class="border cursor-pointer bg-white rounded p-1 d-flex">
+      <input type="checkbox" class="mx-1" [checked]="attribute.checked">
+      <span class="mx-1 text-muted">{{attribute.dVal}}</span>
+    </div>
+</div>
+
+<Symbol-table [symbol]="symbol" [change]="priceChange" [data]="data" [attributes]="allowed_attributes"></Symbol-table>
+<br>

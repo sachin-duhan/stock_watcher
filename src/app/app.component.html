@@ -1,16 +1,13 @@
 <div class="container px-5 py-3">
   <div class="d-flex align-items-center justify-content-between">
-    <h2 class="m-0 p-0 fs-4 text-dark">Symbols</h2>
+    <h2 class="m-0 p-0 fs-4 text-dark">HexChange</h2>
     <div class="d-flex align-items-center mb-2">
-      <input [(ngModel)]="inputSearch" type="text" placeholder="Search..." class="p-2 px-3 fs-6 border text-muted rounded-pill">
-      <button class="mx-2 btn rounded-pill btn-dark px-4">Submit</button>
+      <input [(ngModel)]="inputSearch" type="text" placeholder="BTCUSDT, BNBBTC, ETHUSDT" class="p-2 px-3 fs-6 border text-muted rounded-pill">
+      <button (click)="handleSubmit()" class="mx-2 btn rounded-pill btn-dark px-4">Submit</button>
     </div>
   </div>
-  <div class="p-2 d-flex gap-2 bg-light flex-wrap justify-content-center rounded my-3">
-    <div  *ngFor="let attribute of table_attributes; let idx = index" (click)="handleClick(!attribute.checked, idx)" class="border cursor-pointer bg-white rounded p-1 d-flex">
-      <input type="checkbox" class="mx-1" [checked]="attribute.checked">
-      <span class="mx-1 text-muted">{{attribute.dVal}}</span>
-    </div>
+
+  <div *ngFor="let symbol of current_slist">
+    <stock [symbol]="symbol"></stock>
   </div>
-  <Symbol-table [change]="priceChange" [data]="data" [attributes]="allowed_attributes"></Symbol-table>
 </div>
