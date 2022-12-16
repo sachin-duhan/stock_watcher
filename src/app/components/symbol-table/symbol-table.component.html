@@ -1,0 +1,16 @@
+<table class="table table-bordered table-responsive">
+    <thead>
+      <tr>
+        <th scope="col" *ngFor="let attr of attributes">{{attr}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="data">
+        <td *ngFor="let val of data; let i=index">
+          <span [ngClass]="priceClass(i)">
+            {{val}}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+</table>
