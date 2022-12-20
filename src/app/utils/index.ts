@@ -2,10 +2,12 @@ export const payload = {
     "e": "aggTrade",  // Event type
     "E": 123456789,   // Event time
     "a": 12345,       // Aggregate trade ID
-    "p": "0.001",     // Price
+    // "p": "0.001",     // Price
     "q": "100",       // Quantity
     "T": 123456785,   // Trade time
-    "m": true,        // Is the buyer the market maker?
+    "bp": 1209,       // bid price
+    "ap": 12809,      // ask price
+    // "m": true,        // Is the buyer the market maker?
 } as const
 
 export type TradeData = typeof payload;
@@ -20,14 +22,16 @@ export const getSymbolValue = (value: TAttributes): string => {
       return "EventTime"
     case "a":
       return "AggregateTID"
-    case "p":
-      return "Price"
+    // case "p":
+    //   return "Price"
     case "q":
       return "Quantity"
     case "T":
       return "TradeTime"
-    case "m":
-      return "buyer"
+    case "bp":
+      return "Bid Price"
+    case "ap":
+      return "Ask Price"
   }
 }
 
@@ -45,8 +49,12 @@ export const getKeyFromSymbol = (value: string): string => {
       return "q"
     case "TradeTime":
       return "T"
-    case "buyer":
-      return "m"
+    case "Bid Price":
+      return "bp"
+    case "Ask Price":
+      return "ap"
   }
   return ""
 }
+
+export const BASE_URL = "https://stream.binance.com/api/vi/exchangeSymbols";

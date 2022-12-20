@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { getKeyFromSymbol, getSymbolValue, payload, TAttributes } from 'src/app/utils';
 
+export type PChange = "positive" | 'negetive' | 'neutral';
 @Component({
   selector: 'stock',
   templateUrl: './stock.component.html',
@@ -10,24 +11,46 @@ export class StockComponent implements OnInit, OnDestroy {
   @Input() symbol !: string
 
   public allowed_attributes: string[] = []
-  public priceChange: 'positive' | 'negetive' | 'neutral' = 'neutral';
-  public data: string[] = [];
+  public bidChange: PChange = 'neutral';
+  public askChange: PChange = 'negetive';
+  public data: string[] = Object.keys(payload).map(el => 'loading...');
 
   public parser = (res: any) => {
-    const pIndex = this.allowed_attributes.indexOf('Price');
-    const _data = JSON.parse(res.data)
+    const bidIdx = this.allowed_attributes.indexOf("Bid Price")
+    const askIdx = this.allowed_attributes.indexOf("Ask Price")
 
-    const lPrice = parseFloat(this.data[pIndex])
-    if(pIndex !== -1 && !Number.isNaN(lPrice)){
-      const cPrice = parseFloat(_data['p'])
-      if(cPrice == lPrice) {
-        this.priceChange = 'neutral'
-      } else if (cPrice < lPrice){
-        this.priceChange = 'negetive'
+    const _data = JSON.parse(res.data)
+    const lBidPrice = parseFloat(this.data[bidIdx]) ?? 0
+    const lAskPrice = parseFloat(this.data[askIdx]) ?? 0
+    
+    const isAsk = Boolean(_data['m'])
+    _data['bp'] = !isAsk ? _data['p'] : lAskPrice;
+    _data['ap'] = isAsk ? _data['p'] : lBidPrice;
+    
+    if(bidIdx !== -1 && !Number.isNaN(lBidPrice)){
+      const cPrice = parseFloat(_data['bp'])
+      if(cPrice == lBidPrice) {
+        this.bidChange = 'neutral'
+      } else if (cPrice < lBidPrice){
+        this.bidChange = 'negetive'
       } else {
-        this.priceChange = 'positive'
+        this.bidChange = 'positive'
       }
     }
+
+    if(askIdx !== -1 && !Number.isNaN(lAskPrice)){
+      const cPrice = parseFloat(_data['ap'])
+      if(cPrice == lBidPrice) {
+        this.askChange = 'neutral'
+      } else if (cPrice < lBidPrice){
+        this.askChange = 'negetive'
+      } else {
+        this.askChange = 'positive'
+      }
+    }
+
+    delete _data['p']
+    delete _data['m']
 
     this.data = []
     this.allowed_attributes.forEach(key => {
@@ -71,10 +94,11 @@ export class StockComponent implements OnInit, OnDestroy {
     }
     this.setAllowAttr()
   }
-  @Output() remove = new EventEmitter<void>();
+
+  @Output() remove = new EventEmitter<string>();
 
   _remove(){
-    this.remove.emit()
+    this.remove.emit(this.symbol)
     this.ngOnDestroy()
   }
 }

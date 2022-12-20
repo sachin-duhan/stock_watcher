@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { TradeData } from 'src/app/utils';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { PChange } from '../stock/stock.component';
 
 @Component({
   selector: 'Symbol-table',
@@ -10,16 +10,34 @@ export class SymbolTableComponent {
   @Input() symbol!: string;
   @Input() attributes!: string[]
   @Input() data!: string[];
-  @Input() change!: 'positive' | 'negetive' | 'neutral';
+  @Input() bChange!: PChange;
+  @Input() aChange!: PChange;
 
-  priceClass(index: any): string {
+  @Output() remove = new EventEmitter<void>();
+
+
+  bidClass(index: any): string {
     let _class = "";
-    if(this.attributes[index] == 'Price'){
-      if(this.change == 'positive') _class = "text-success";
-      else if(this.change == 'negetive') _class = "text-danger"
+    if(this.attributes[index] == 'Bid Price'){
+      if(this.bChange == 'positive') _class = "text-success";
+      else if(this.bChange == 'negetive') _class = "text-danger"
       else _class = "text-dark";
     }
     return _class;
+  }
+
+  askClass(index: any): string {
+    let _class = "";
+    if(this.attributes[index] == 'Ask Price'){
+      if(this.aChange == 'positive') _class = "text-success";
+      else if(this.aChange == 'negetive') _class = "text-danger"
+      else _class = "text-dark";
+    }
+    return _class;
+  }
+
+  handleRemove(){
+    this.remove.emit()
   }
 
   constructor() {}

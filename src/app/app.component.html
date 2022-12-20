@@ -7,7 +7,16 @@
     </div>
   </div>
 
-  <div *ngFor="let symbol of current_slist; let idx=index">
-    <stock (remove)="removeSymbol(idx)" [symbol]="symbol"></stock>
-  </div>
+  
+  <input type="text" placeholder="filter symbol..." [(ngModel)]="symbolQuery" [value]="symbolQuery" (ngModelChange)="handleFilterChange()" class="px-3 mb-2 rounded-pill py-1 border rounded">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Symbol</th>
+        <th *ngFor="let attribute of table_attributes; let idx = index">{{attribute.dVal}}</th>
+        <th>Remove</th>
+      </tr>
+    </thead>
+  </table>
+  <stock *ngFor="let symbol of filtered_symbol_list; let idx=index" (remove)="removeSymbol(idx)" [symbol]="symbol"></stock>
 </div>
